@@ -12,7 +12,7 @@ const styleSheet = `
         width: 25%;
     }
     main {
-        flex-grow: 1;
+        width: 75%;
     }
     @media (max-width: 600px) {
         body {

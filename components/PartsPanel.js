@@ -77,7 +77,7 @@ class PartsPanel extends WebComponent {
                                 data-${this.partModelIndexDataKey}=${index}
                                 data-${this.partTypeDataKey}=${partType}
                                 src=${resolvedImagePath}
-                            >
+                            />
                             <figcaption>
                                 <span>${name}</span>
                                 <dl>

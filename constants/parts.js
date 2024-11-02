@@ -155,4 +155,4 @@ const DRONE_PARTS = {
     }
 };
 
-export { DRONE_PARTS, DRONES };
+export { DRONE_PART_TYPES, DRONE_PARTS, DRONES };
