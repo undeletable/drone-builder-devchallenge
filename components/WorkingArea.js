@@ -1,6 +1,7 @@
 import { DRONE_PART_TYPES } from "../constants/parts.js";
 import { WebComponent } from "../lib/WebComponent.js";
 import { ACTIONS, SELECTORS } from "../state/state.js";
+import { dowwloadJSON } from "../utils/files.js";
 
 const { partApply, partsClear } = ACTIONS;
 const { getAppliedParts, getIsDroneComplete, getTotalPrice } = SELECTORS;
@@ -17,6 +18,10 @@ class WorkingArea extends WebComponent {
     partImageClassName = "part-image";
 
     summaryAreaClassName = "summary";
+
+    exportButtonClassName = "export-button";
+
+    exportButtonId = "export-button";
 
     isWorkingArea = true;
 
@@ -122,10 +127,23 @@ class WorkingArea extends WebComponent {
         });
         partApply.subscribe(this.performRender.bind(this));
         partsClear.subscribe(this.performRender.bind(this));
+        this.shadowRoot.addEventListener("click", (event) => {
+            const { id } = this.getEventTarget(event);
+            if (id === this.exportButtonId) {
+                const appliedParts = getAppliedParts();
+                const price = getTotalPrice();
+                const jsonForExport = {
+                    parts: appliedParts,
+                    price
+                };
+                dowwloadJSON(jsonForExport, "drone-setup.json");
+            }
+        });
     }
 
     // TODO move texts to MESSAGES
     // TODO move summary to separate component
+    // TODO fix images positions, works best on 790*662 window
     render() {
         const appliedParts = getAppliedParts();
         const price = getTotalPrice();
@@ -142,7 +160,7 @@ class WorkingArea extends WebComponent {
                     border: 1px dashed #000;
                     box-sizing: border-box;
                     display: flex;
-                    height: calc(100vh - 30px);
+                    height: calc(100vh - 100px);
                     justify-content: center;
                     padding: 10%;
                     width: 100%;
@@ -161,6 +179,17 @@ class WorkingArea extends WebComponent {
                 }
                 .${this.summaryAreaClassName} {
                     padding: 5px;
+                }
+                .${this.exportButtonClassname} {
+                    background-color: #008000;
+                    border: none;
+                    color: #FFFFFF;
+                    cursor: pointer;
+                    padding: 5px;
+                    width: 100%;
+                }
+                .${this.exportButtonClassname}:hover {
+                    opacity: 0.8;
                 }
             </style>
             <div class="${this.dropAreaClassName}" id="${this.dropAreaId}">
@@ -192,8 +221,15 @@ class WorkingArea extends WebComponent {
                 </div>
             </div>
             <div class="${this.summaryAreaClassName}">
-                    The drone setup is ${isComplete ? "" : "not yet "}complete.
-                    Total price: $${price}
+                The drone setup is ${isComplete ? "" : "not yet "}complete.
+                Total price: $${price}
+                ${isComplete
+                    ? `
+                        <button class="${this.exportButtonClassname}" id="${this.exportButtonId}">
+                            Export to JSON
+                        </button>
+                    `
+                    : ""}
             </div>
         `;
     }
