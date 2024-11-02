@@ -1,4 +1,4 @@
-import { DRONE_PARTS, DRONES } from "../constants/parts.js";
+import { DRONE_PART_TYPES, DRONE_PARTS, DRONES } from "../constants/parts.js";
 import { StateManagementEvent } from "../lib/StateManagementEvent.js";
 
 const _store = {
@@ -11,8 +11,17 @@ const _store = {
 const SELECTORS = {
     getAppliedParts: () => _store.appliedParts,
     getAvailableParts: () => _store.availableParts,
+    getCurrentDroneType: () => _store.appliedParts.find(
+        ({ type }) => type === DRONE_PART_TYPES.frame
+    )?.compatibility[0],
     getDrones: () => _store.drones,
-    getSelectedPart: () => _store.selectedPart
+    getIsDroneComplete: () => SELECTORS.getAppliedParts().length === Object.keys(DRONE_PARTS).length,
+    getIsPartApplied: (partType) => _store.appliedParts.some(({ type }) => type === partType),
+    getIsFrameApplied: () => SELECTORS.getIsPartApplied(DRONE_PART_TYPES.frame),
+    getSelectedPart: () => _store.selectedPart,
+    getTotalPrice: () => _store.appliedParts.reduce((accumulator, { price, quantity }) => {
+        return accumulator + (price * quantity);
+    }, 0)
 };
 
 const _STORE_MODIFIERS = {

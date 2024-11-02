@@ -1,8 +1,9 @@
+import { DRONE_PART_TYPES } from "../constants/parts.js";
 import { WebComponent } from "../lib/WebComponent.js";
 import { ACTIONS, SELECTORS } from "../state/state.js";
 
 const { partApply, partDeselect, partSelect } = ACTIONS;
-const { getAvailableParts, getDrones } = SELECTORS;
+const { getAvailableParts, getCurrentDroneType, getDrones, getIsFrameApplied, getIsPartApplied } = SELECTORS;
 
 class PartsPanel extends WebComponent {
     drones = getDrones();
@@ -10,6 +11,10 @@ class PartsPanel extends WebComponent {
     parts = getAvailableParts();
 
     imageClassName = "part-image";
+
+    disabledModelClassName = "disabled";
+
+    partDisabledDataKey = "partdisabled";
 
     partModelIndexDataKey = "partmodelindex";
 
@@ -21,7 +26,11 @@ class PartsPanel extends WebComponent {
             event.preventDefault();
             const eventTarget = this.getEventTarget(event);
             const { dataset } = eventTarget;
-            if (dataset[this.partModelIndexDataKey] && dataset[this.partTypeDataKey]) {
+            if (
+                dataset[this.partDisabledDataKey] !== "true"
+                && dataset[this.partModelIndexDataKey]
+                && dataset[this.partTypeDataKey]
+            ) {
                 const { models, ...typeData } = this.parts[dataset[this.partTypeDataKey]];
                 const modelData = models[dataset[this.partModelIndexDataKey]];
                 const partData = {
@@ -46,57 +55,78 @@ class PartsPanel extends WebComponent {
                 document.addEventListener("mouseup", onMouseUp);
             }
         });
+        partApply.subscribe(this.performRender.bind(this));
     }
 
     // TODO move texts to MESSAGES
     // TODO move images to separate component
     render() {
-        return this.mapForRender(Object.entries(this.parts), ([partType, partData]) => {
-            const { imagePath: partTypeImagePath, label, models } = partData;
-            return `
-                <style>
-                    .${this.imageClassName} {
-                        cursor: grab;
-                        width: 100%;
-                    }
-                </style>
-                <div id="test">
-                    <h3>${label}</h3>
-                    ${this.mapForRender(models, (modelData, index) => {
-                        const {
-                            imagePath: partModelImagePath, name, price, compatibility
-                        } = modelData;
-                        const resolvedImagePath = encodeURIComponent(
-                            partModelImagePath || partTypeImagePath
-                        );
-                        return `
-                            <figure></figure>
-                            <img
-                                alt=${name}
-                                class=${this.imageClassName}
-                                data-${this.partModelIndexDataKey}=${index}
-                                data-${this.partTypeDataKey}=${partType}
-                                src=${resolvedImagePath}
-                            />
-                            <figcaption>
-                                <span>${name}</span>
-                                <dl>
-                                    <dt>Price</dt>
-                                    <dd>$${price}</dd>
-                                    <dt>Compatible with</dt>
-                                    <dd>
-                                        ${this.mapForRender(
-                                            compatibility,
-                                            (droneType) => droneType
-                                        )}
-                                    </dd>
-                                </dl>
-                            </figcaption>
-                        `;
-                    })}
-                </div>
-            `;
-        });
+        const currentDroneType = getCurrentDroneType();
+        return `
+            <style>
+                .${this.imageClassName} {
+                    cursor: grab;
+                    width: 100%;
+                }
+                .${this.disabledModelClassName},
+                .${this.disabledModelClassName} .${this.imageClassName} {
+                    cursor: not-allowed;
+                }
+                .${this.disabledModelClassName} {
+                    opacity: 0.5;
+                }
+            </style>
+            <h2>Select parts for drone</h2>
+            <div>Start from frame</div>
+            ${this.mapForRender(Object.entries(this.parts), ([partType, partData]) => {
+                const isPartDisabled = getIsPartApplied(partType)
+                    || (!getIsFrameApplied() && partType !== DRONE_PART_TYPES.frame);
+                const { imagePath: partTypeImagePath, label, models } = partData;
+                return `
+                    <div${isPartDisabled ? ` class="${this.disabledModelClassName}"`: ""}>
+                        <h3>${label}</h3>
+                        ${this.mapForRender(models, (modelData, index) => {
+                            const {
+                                imagePath: partModelImagePath, name, price, compatibility
+                            } = modelData;
+                            const isModelDisabled = isPartDisabled
+                                || (!!currentDroneType && !compatibility.includes(currentDroneType));
+                            const resolvedImagePath = encodeURIComponent(
+                                partModelImagePath || partTypeImagePath
+                            );
+                            return `
+                                <figure${isModelDisabled ? ` class="${this.disabledModelClassName}"`: ""}>
+                                    <img
+                                        alt="${name}"
+                                        class="${this.imageClassName}"
+                                        data-${this.partDisabledDataKey}="${
+                                            isModelDisabled.toString()
+                                        }"
+                                        data-${this.partModelIndexDataKey}="${index}"
+                                        data-${this.partTypeDataKey}="${partType}"
+                                        src="${resolvedImagePath}"
+                                    />
+                                    <figcaption>
+                                        <span>${name}</span>
+                                        <dl>
+                                            <dt>Price</dt>
+                                            <dd>$${price}</dd>
+                                            <dt>Compatible with</dt>
+                                            <dd>
+                                                ${this.mapForRender(
+                                                    compatibility,
+                                                    (droneType) => droneType
+                                                )}
+                                            </dd>
+                                        </dl>
+                                    </figcaption>
+                                </figure>
+                            `;
+                        })}
+                    </div>
+                `;
+            })}
+        `;
     }
 }
 

@@ -3,7 +3,7 @@ import { WebComponent } from "../lib/WebComponent.js";
 import { ACTIONS, SELECTORS } from "../state/state.js";
 
 const { partApply } = ACTIONS;
-const { getAppliedParts } = SELECTORS;
+const { getAppliedParts, getIsDroneComplete, getTotalPrice } = SELECTORS;
 
 class WorkingArea extends WebComponent {
     dropAreaId = "drop-area";
@@ -15,6 +15,8 @@ class WorkingArea extends WebComponent {
     droneImageAreaClassName = "drone-image";
 
     partImageClassName = "part-image";
+
+    summaryAreaClassName = "summary";
 
     isWorkingArea = true;
 
@@ -126,6 +128,11 @@ class WorkingArea extends WebComponent {
 
         return `
             <style>
+                :root {
+                    align-items: stretch;
+                    display: flex;
+                    flex-direction: column;
+                }
                 .${this.dropAreaClassName} {
                     align-items: center;
                     border: 1px dashed #000;
@@ -176,7 +183,14 @@ class WorkingArea extends WebComponent {
                         }
                     )}
                 </div>
-            <div>
+            </div>
+            <div class="${this.summaryAreaClassName}">
+                <h2>Summary</h2>
+                <div>
+                    The drone setup is ${getIsDroneComplete() ? "" : "not yet "}complete.
+                    Total price: $${getTotalPrice()}
+                </div>
+            </div>
         `;
     }
 }
