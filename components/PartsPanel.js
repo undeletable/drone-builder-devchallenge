@@ -16,6 +16,7 @@ class PartsPanel extends WebComponent {
     partTypeDataKey = "parttype";
 
     onConnected() {
+        // TODO change cursor CSS property value to grabbing for the whole page while dragging
         this.shadowRoot.addEventListener("mousedown", (event) => {
             event.preventDefault();
             const eventTarget = this.getEventTarget(event);
