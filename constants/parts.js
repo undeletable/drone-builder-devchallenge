@@ -88,75 +88,71 @@ const DRONE_PARTS = {
     [DRONE_PART_TYPES.flightController]: {
         label: MESSAGES.flightController,
         quantity: 1,
+        imagePath: "images/drone-assets/7 - controller.PNG",
         models: [
             {
                 name: "SpeedyBee V4 55A",
                 price: 50,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/7 - controller.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             },
             {
                 name: "Mamba F405 MK2",
                 price: 70,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/7 - controller.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             }
         ]
     },
     [DRONE_PART_TYPES.camera]: {
         label: MESSAGES.camera,
         quantity: 1,
+        imagePath: "images/drone-assets/8 -camera.PNG",
         models: [
             {
                 name: "Caddx Ratel Pro",
                 price: 30,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/8 -camera.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             },
             {
                 name: "Foxeer Night Cat 3",
                 price: 40,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/8 -camera.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             }
         ]
     },
     [DRONE_PART_TYPES.videoAntenna]: {
         label: MESSAGES.videoAntenna,
         quantity: 1,
+        imagePath: "images/drone-assets/9 -video antenna.PNG",
         models: [
             {
                 name: "Rush Cherry 2",
                 price: 10,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/9 -video antenna.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             },
             {
                 name: "SkyZone MushRoom",
                 price: 8,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/9 -video antenna.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             }
         ]
     },
     [DRONE_PART_TYPES.radioModule]: {
         label: MESSAGES.radioModule,
         quantity: 1,
+        imagePath: "images/drone-assets/10 - radio module.PNG",
         models: [
             {
                 name: "Bayck ELRS 915mhz",
                 price: 10,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/10 - radio module.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             },
             {
                 name: "HappyModel RX 915mhz",
                 price: 15,
-                compatibility: [DRONES.sevenInch, DRONES.tenInch],
-                imagePath: "images/drone-assets/10 - radio module.PNG"
+                compatibility: [DRONES.sevenInch, DRONES.tenInch]
             }
         ]
     }
 };
 
-export { DRONE_PARTS };
+export { DRONE_PARTS, DRONES };

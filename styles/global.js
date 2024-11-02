@@ -1,4 +1,22 @@
-const styleSheet = ``;
+const styleSheet = `
+    body {
+        align-items: stretch;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    aside {
+        width: 25%;
+    }
+    @media (max-width: 600px) {
+        body {
+            flex-direction: column;
+        }
+        aside: {
+            width: 100%;
+        }
+    }
+`;
 
 let isStyleSheetAdded = false;
 
