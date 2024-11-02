@@ -28,7 +28,25 @@ There are two types of drones to build: 7” and 10”. The frame size determine
 - Frame
 - Motor + Propeller
 
-![details](images/details.png)
+| Detail           | Name                                             | Price | Compatibility |
+|------------------|--------------------------------------------------|-------|---------------|
+| Frame            | Mark 4 7"                                        | $12   | 7"            |
+| Frame            | Mark 4 v2 10"                                    | $20   | 10"           |
+| Motors           | Flash Hobby 2807 1300kv + Props HQProp 7x4x3     | $55   | 7"            |
+| Motors           | EMAX 2807 1300kv + Props HQProp 7x4x3            | $45   | 7"            |
+| Motors           | ReadyToSky 3115 900kv + Props HQ MacroQuad 10x5x3| $70   | 10"           |
+| Motors           | BrotherHobby Tornado 3115 900kv + HQ MacroQuad 10x5x3 | $110  | 10"   |
+| Battery          | 6s2p 8000mAh                                     | $60   | 7" and 10"    |
+| Battery          | 6s3p 12000mAh                                    | $90   | 7" and 10"    |
+| Flight Controller| SpeedyBee V4 55A                                 | $50   | 7" and 10"    |
+| Flight Controller| Mamba F405 MK2                                   | $70   | 7" and 10"    |
+| Camera           | Caddx Ratel Pro                                  | $30   | 7" and 10"    |
+| Camera           | Foxeer Night Cat 3                               | $40   | 7" and 10"    |
+| Video Antenna    | Rush Cherry 2                                    | $10   | 7" and 10"    |
+| Video Antenna    | SkyZone MushRoom                                 | $8    | 7" and 10"    |
+| Radio Module     | Bayck ELRS 915mhz                                | $10   | 7" and 10"    |
+| Radio Module     | HappyModel RX 915mhz                             | $15   | 7" and 10"    |
+
 
 
 ## Main Requirements
