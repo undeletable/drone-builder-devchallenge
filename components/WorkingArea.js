@@ -123,9 +123,12 @@ class WorkingArea extends WebComponent {
         partApply.subscribe(this.performRender.bind(this));
     }
 
+    // TODO move texts to MESSAGES
+    // TODO move summary to separate component
     render() {
         const appliedParts = getAppliedParts();
-
+        const price = getTotalPrice();
+        const isComplete = getIsDroneComplete();
         return `
             <style>
                 :root {
@@ -187,8 +190,8 @@ class WorkingArea extends WebComponent {
             <div class="${this.summaryAreaClassName}">
                 <h2>Summary</h2>
                 <div>
-                    The drone setup is ${getIsDroneComplete() ? "" : "not yet "}complete.
-                    Total price: $${getTotalPrice()}
+                    The drone setup is ${isComplete ? "" : "not yet "}complete.
+                    Total price: $${price}
                 </div>
             </div>
         `;

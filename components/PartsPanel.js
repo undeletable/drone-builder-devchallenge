@@ -79,18 +79,26 @@ class PartsPanel extends WebComponent {
             <h2>Select parts for drone</h2>
             <div>Start from frame</div>
             ${this.mapForRender(Object.entries(this.parts), ([partType, partData]) => {
-                const isPartDisabled = getIsPartApplied(partType)
-                    || (!getIsFrameApplied() && partType !== DRONE_PART_TYPES.frame);
+                const isPartAlreadyApplied = getIsPartApplied(partType);
+                const isFrameNotSelected = !getIsFrameApplied() && partType !== DRONE_PART_TYPES.frame;
+                const isPartDisabled = isPartAlreadyApplied || isFrameNotSelected;
                 const { imagePath: partTypeImagePath, label, models } = partData;
                 return `
                     <div${isPartDisabled ? ` class="${this.disabledModelClassName}"`: ""}>
                         <h3>${label}</h3>
+                        ${isPartAlreadyApplied
+                            ? "<div>This part is already applied</div>"
+                            : ""}
+                        ${isFrameNotSelected
+                            ? "<div>Select frame first</div>"
+                            : ""}
                         ${this.mapForRender(models, (modelData, index) => {
                             const {
                                 imagePath: partModelImagePath, name, price, compatibility
                             } = modelData;
-                            const isModelDisabled = isPartDisabled
-                                || (!!currentDroneType && !compatibility.includes(currentDroneType));
+                            const isModelIncompatibleWithFrame = !!currentDroneType
+                                && !compatibility.includes(currentDroneType)
+                            const isModelDisabled = isPartDisabled || isModelIncompatibleWithFrame;
                             const resolvedImagePath = encodeURIComponent(
                                 partModelImagePath || partTypeImagePath
                             );
@@ -119,6 +127,11 @@ class PartsPanel extends WebComponent {
                                                 )}
                                             </dd>
                                         </dl>
+                                        <div>
+                                            ${isModelIncompatibleWithFrame
+                                                ? "<div>This model is incompatible with selected frame</div>"
+                                                : ""}
+                                        </div>
                                     </figcaption>
                                 </figure>
                             `;
