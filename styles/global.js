@@ -3,16 +3,23 @@ const styleSheet = `
         align-items: stretch;
         display: flex;
         justify-content: space-between;
+        margin: 0;
         width: 100%;
     }
     aside {
+        height: 100vh;
+        overflow: auto;
         width: 25%;
+    }
+    main {
+        flex-grow: 1;
     }
     @media (max-width: 600px) {
         body {
             flex-direction: column;
         }
         aside: {
+            height: auto;
             width: 100%;
         }
     }
