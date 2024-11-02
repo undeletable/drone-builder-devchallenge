@@ -36,7 +36,7 @@ There are two types of drones to build: 7” and 10”. The frame size determine
 ### Interface
 
 The UI is divided into two parts: a parts panel and a working area (top view) for drone assembly.
-Assets of the drone's components can be found [here](images/drone_asset.zip).
+Assets of the drone's components can be found [here](images/drone-assets).
 
 ### Assembly and Connection
 
