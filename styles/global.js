@@ -2,6 +2,7 @@ const styleSheet = `
     body {
         align-items: stretch;
         display: flex;
+        font-family: sans-serif;
         justify-content: space-between;
         margin: 0;
         width: 100%;
@@ -9,19 +10,11 @@ const styleSheet = `
     aside {
         height: 100vh;
         overflow: auto;
+        padding: 5px;
         width: 25%;
     }
     main {
         width: 75%;
-    }
-    @media (max-width: 600px) {
-        body {
-            flex-direction: column;
-        }
-        aside: {
-            height: auto;
-            width: 100%;
-        }
     }
 `;
 

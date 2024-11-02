@@ -10,6 +10,7 @@ const _store = {
 
 const SELECTORS = {
     getAppliedParts: () => _store.appliedParts,
+    getHasAppliedParts: () => SELECTORS.getAppliedParts().length > 0,
     getAvailableParts: () => _store.availableParts,
     getCurrentDroneType: () => _store.appliedParts.find(
         ({ type }) => type === DRONE_PART_TYPES.frame
@@ -26,6 +27,7 @@ const SELECTORS = {
 
 const _STORE_MODIFIERS = {
     applyPart: (partData) => _store.appliedParts.push(partData),
+    clearAppliedParts: () => _store.appliedParts = [],
     clearSelectedPart: () => _store.selectedPart = null,
     setSelectedPart: (partData) => _store.selectedPart = partData
 };
@@ -34,6 +36,7 @@ const _ACTION_TYPES = {
     partApply: "part-apply",
     partDeselect: "part-deselect",
     partSelect: "part-select",
+    partsClear: "parts-clear"
 };
 
 const ACTIONS = Object.entries(_ACTION_TYPES).reduce(
@@ -46,5 +49,6 @@ const ACTIONS = Object.entries(_ACTION_TYPES).reduce(
 
 ACTIONS.partApply.subscribe(_STORE_MODIFIERS.applyPart);
 ACTIONS.partSelect.subscribe(_STORE_MODIFIERS.setSelectedPart);
+ACTIONS.partsClear.subscribe(_STORE_MODIFIERS.clearAppliedParts);
 
 export { ACTIONS, SELECTORS };

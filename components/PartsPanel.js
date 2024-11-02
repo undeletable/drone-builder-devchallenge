@@ -2,8 +2,11 @@ import { DRONE_PART_TYPES } from "../constants/parts.js";
 import { WebComponent } from "../lib/WebComponent.js";
 import { ACTIONS, SELECTORS } from "../state/state.js";
 
-const { partApply, partDeselect, partSelect } = ACTIONS;
-const { getAvailableParts, getCurrentDroneType, getDrones, getIsFrameApplied, getIsPartApplied } = SELECTORS;
+const { partApply, partDeselect, partSelect, partsClear } = ACTIONS;
+const {
+    getAvailableParts, getCurrentDroneType, getDrones, getHasAppliedParts, getIsFrameApplied,
+    getIsPartApplied
+} = SELECTORS;
 
 class PartsPanel extends WebComponent {
     drones = getDrones();
@@ -19,6 +22,12 @@ class PartsPanel extends WebComponent {
     partModelIndexDataKey = "partmodelindex";
 
     partTypeDataKey = "parttype";
+
+    clearButtonClassname = "clear-button";
+
+    clearButtonId = "clear-button";
+
+    figureClassName = "part-figure";
 
     onConnected() {
         // TODO change cursor CSS property value to grabbing for the whole page while dragging
@@ -55,13 +64,22 @@ class PartsPanel extends WebComponent {
                 document.addEventListener("mouseup", onMouseUp);
             }
         });
+        this.shadowRoot.addEventListener("click", (event) => {
+            const { id } = this.getEventTarget(event);
+            if (id === this.clearButtonId) {
+                partsClear.dispatch();
+            }
+        });
         partApply.subscribe(this.performRender.bind(this));
+        partsClear.subscribe(this.performRender.bind(this));
     }
 
     // TODO move texts to MESSAGES
     // TODO move images to separate component
     render() {
         const currentDroneType = getCurrentDroneType();
+        const hasAppliedParts = getHasAppliedParts();
+        console.log(currentDroneType, hasAppliedParts)
         return `
             <style>
                 .${this.imageClassName} {
@@ -75,9 +93,30 @@ class PartsPanel extends WebComponent {
                 .${this.disabledModelClassName} {
                     opacity: 0.5;
                 }
+                .${this.clearButtonClassname} {
+                    background-color: #FF0000;
+                    border: none;
+                    color: #FFFFFF;
+                    cursor: pointer;
+                    padding: 5px;
+                    width: 100%;
+                }
+                .${this.clearButtonClassname}:hover {
+                    opacity: 0.8;
+                }
+                .${this.figureClassName} {
+                    border-bottom: 1px solid #000;
+                    margin: 0;
+                }
             </style>
             <h2>Select parts for drone</h2>
-            <div>Start from frame</div>
+            ${hasAppliedParts
+                ? `
+                    <button class="${this.clearButtonClassname}" id="${this.clearButtonId}">
+                        Clear selected parts
+                    </button>
+                `
+                : "<div>Select frame first</div>"}
             ${this.mapForRender(Object.entries(this.parts), ([partType, partData]) => {
                 const isPartAlreadyApplied = getIsPartApplied(partType);
                 const isFrameNotSelected = !getIsFrameApplied() && partType !== DRONE_PART_TYPES.frame;
@@ -103,7 +142,12 @@ class PartsPanel extends WebComponent {
                                 partModelImagePath || partTypeImagePath
                             );
                             return `
-                                <figure${isModelDisabled ? ` class="${this.disabledModelClassName}"`: ""}>
+                                <figure
+                                    class="${this.figureClassName}${isModelDisabled
+                                        ? ` ${this.disabledModelClassName}`
+                                        : ""
+                                    }"
+                                >
                                     <img
                                         alt="${name}"
                                         class="${this.imageClassName}"

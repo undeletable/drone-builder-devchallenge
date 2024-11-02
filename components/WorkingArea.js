@@ -2,7 +2,7 @@ import { DRONE_PART_TYPES } from "../constants/parts.js";
 import { WebComponent } from "../lib/WebComponent.js";
 import { ACTIONS, SELECTORS } from "../state/state.js";
 
-const { partApply } = ACTIONS;
+const { partApply, partsClear } = ACTIONS;
 const { getAppliedParts, getIsDroneComplete, getTotalPrice } = SELECTORS;
 
 class WorkingArea extends WebComponent {
@@ -121,6 +121,7 @@ class WorkingArea extends WebComponent {
             event.target.classList.remove(this.dropAreaActiveClassName);
         });
         partApply.subscribe(this.performRender.bind(this));
+        partsClear.subscribe(this.performRender.bind(this));
     }
 
     // TODO move texts to MESSAGES
@@ -141,7 +142,7 @@ class WorkingArea extends WebComponent {
                     border: 1px dashed #000;
                     box-sizing: border-box;
                     display: flex;
-                    height: calc(100vh - 100px);
+                    height: calc(100vh - 30px);
                     justify-content: center;
                     padding: 10%;
                     width: 100%;
@@ -157,6 +158,9 @@ class WorkingArea extends WebComponent {
                 }
                 .${this.partImageClassName} {
                     position: absolute;
+                }
+                .${this.summaryAreaClassName} {
+                    padding: 5px;
                 }
             </style>
             <div class="${this.dropAreaClassName}" id="${this.dropAreaId}">
@@ -188,11 +192,8 @@ class WorkingArea extends WebComponent {
                 </div>
             </div>
             <div class="${this.summaryAreaClassName}">
-                <h2>Summary</h2>
-                <div>
                     The drone setup is ${isComplete ? "" : "not yet "}complete.
                     Total price: $${price}
-                </div>
             </div>
         `;
     }
