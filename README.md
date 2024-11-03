@@ -1,5 +1,9 @@
 # Task for DEV Challenge XXI final
 
+## Disclaimer
+
+Due to time limit, the solution is incomplete and has bugs. If I have free time and inspiration, I'll do my best to finish it.
+
 ## Description
 
 Create a visual FPV drone builder with a categorized panel of parts (e.g., Power Components, Propellers) and a working area for assembling them. Parts are dragged and connected at specific points (connectors), with visual indicators for compatibility.
